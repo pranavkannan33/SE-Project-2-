@@ -1,0 +1,5 @@
+com/sismics/books/rest/filter/CookieAuthenticationFilter.class
+com/sismics/books/rest/descriptor/JerseyTestWebAppDescriptorFactory.class
+com/sismics/books/rest/util/TestValidationUtil.class
+com/sismics/books/rest/BaseJerseyTest.class
+com/sismics/books/rest/util/ClientUtil.class

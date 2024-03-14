@@ -1,0 +1,4 @@
+com/sismics/util/TestResourceUtil.class
+com/sismics/books/core/dao/jpa/TestJpa.class
+com/sismics/books/core/util/math/MathUtilTest.class
+com/sismics/books/BaseTransactionalTest.class

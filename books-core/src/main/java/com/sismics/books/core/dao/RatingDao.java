@@ -1,4 +1,4 @@
-package com.sismics.books.core.dao.jpa;
+package com.sismics.books.core.dao;
 
 import com.sismics.books.core.model.jpa.Rating;
 import javax.persistence.EntityManager;

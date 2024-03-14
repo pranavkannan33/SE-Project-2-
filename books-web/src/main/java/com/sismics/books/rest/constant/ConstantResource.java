@@ -25,6 +25,10 @@ public final class ConstantResource {
     public static final String LANGUAGE = "language";
     public static final String PUBLISH_DATE = "publish_date";
     public static final String TAGS = "tags";
+    public static final String GENRES = "genres";
+    public static final String RATINGS = "rating";
+    // add for thumbnail image URL
+    public static final String THUMBNAIL_IMAGE_URL = "thumbnail";
 
     public static final String NAME = "name";
     public static final String COLOR = "color";

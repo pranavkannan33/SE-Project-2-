@@ -1,10 +1,19 @@
 package com.sismics.books.core.model.jpa;
 
+import java.beans.Transient;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.google.common.base.Objects;
@@ -90,7 +99,7 @@ public class Book {
      * @param genres
      * @param ratings
      */
-    public Book(String id, String title, String subtitle, String author, String description, String isbn10, String isbn13, Long pageCount, String language, Date publishDate) {
+    public Book(String id, String title, String subtitle, String author, String description, String isbn10, String isbn13, Long pageCount, String language, Date publishDate, String thumbnailImageUrl, Set<Genre> genres, Set<Rating> ratings) {
         this.id = id;
         this.title = title;
         this.subtitle = subtitle;
@@ -104,7 +113,7 @@ public class Book {
         this.thumbnailImageUrl = thumbnailImageUrl;
         this.genres = genres;
         this.ratings = ratings;
-
+        // Note: Ratings are typically managed via separate method(s), not passed in constructor
     }
 
     /**
@@ -310,7 +319,7 @@ public class Book {
      * 
      * @return genres
      */
-    public Set<genres> getgenres() {
+     public Set<Genre> getGenres() {
         return genres;
     }
 
@@ -319,7 +328,7 @@ public class Book {
      * 
      * @param genres genres
      */
-    public void setgenres(Set<genres> genres) {
+    public void setGenres(Set<Genre> genres) {
         this.genres = genres;
     }
 
@@ -328,7 +337,7 @@ public class Book {
      * 
      * @return ratings
      */
-    public Set<ratings> getratings() {
+    public Set<Rating> getRatings() {
         return ratings;
     }
 
@@ -337,7 +346,7 @@ public class Book {
      * 
      * @param ratings ratings
      */
-    public void setratings(Set<ratings> ratings) {
+    public void setRatings(Set<Rating> ratings) {
         this.ratings = ratings;
     }
 
@@ -401,18 +410,24 @@ public class Book {
         }
 
         if (genres != null) {
-            this.setgenres(genres);
+            this.setGenres(genres);
         }
 
         if (ratings != null) {
-            this.setratings(ratings);
+            this.setRatings(ratings);
         }
     }
-
     @Transient
     public Double getAverageRating() {
-        return ratings.isEmpty() ? null :
-            ratings.stream().mapToInt(Rating::getValue).average().orElse(Double.NaN);
+        if (ratings.isEmpty()) {
+            return null;
+        }
+    
+        double sum = 0;
+        for (Rating rating : ratings) {
+            sum += rating.getValue();
+        }
+        return sum / ratings.size();
     }
 
     @Transient

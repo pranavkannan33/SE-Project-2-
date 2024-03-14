@@ -36,6 +36,7 @@ import org.codehaus.jettison.json.JSONObject;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+import com.introproventures.graphql.jpa.query.schema.model.book.Genre;
 import com.sismics.books.core.dao.jpa.BookDao;
 import com.sismics.books.core.dao.jpa.TagDao;
 import com.sismics.books.core.dao.jpa.UserBookDao;
@@ -46,6 +47,7 @@ import com.sismics.books.core.dao.jpa.dto.UserBookDto;
 import com.sismics.books.core.event.BookImportedEvent;
 import com.sismics.books.core.model.context.AppContext;
 import com.sismics.books.core.model.jpa.Book;
+import com.sismics.books.core.model.jpa.Rating;
 import com.sismics.books.core.model.jpa.Tag;
 import com.sismics.books.core.model.jpa.User;
 import com.sismics.books.core.model.jpa.UserBook;
@@ -171,6 +173,11 @@ public class BookResource extends BaseResource {
             @FormParam(PAGE_COUNT) Long pageCount,
             @FormParam(LANGUAGE) String language,
             @FormParam(PUBLISH_DATE) String publishDateStr,
+            @FormParam(THUMBNAIL_IMAGE_URL) String thumbnailImageUrl,
+            // @FormParam(GENRES) Set<Genre> genres,
+            @FormParam(GENRES) Set<Genre> genres,
+            @FormParam(RATINGS) Set<Rating> ratings,
+
             @FormParam(TAGS) List<String> tagList) throws JSONException {
         if (!authenticate()) {
             throw new ForbiddenClientException();
@@ -185,6 +192,10 @@ public class BookResource extends BaseResource {
         isbn13 = ValidationUtil.validateLength(isbn13, ISBN13, 13, 13, true);
         language = ValidationUtil.validateLength(language, LANGUAGE, 2, 2, true);
         Date publishDate = ValidationUtil.validateDate(publishDateStr, PUBLISH_DATE, false);
+        thumbnailImageUrl = ValidationUtil.validateLength(thumbnailImageUrl, THUMBNAIL_IMAGE_URL, 1, 255, true);
+        Set<String> genres = new HashSet<>();
+        Set<Rating> ratings = new HashSet<>();
+        // ratings = ValidationUtil.validateLength(ratings, RATINGS, 1, 255, true);
 
         if (Strings.isNullOrEmpty(isbn10) && Strings.isNullOrEmpty(isbn13)) {
             throw new ClientException("ValidationError", "At least one ISBN number is mandatory");
@@ -201,7 +212,8 @@ public class BookResource extends BaseResource {
         // Create the book
 
         String bookId = UUID.randomUUID().toString();   
-        Book book = new Book(bookId, title, subtitle, author, description, isbn10, isbn13, pageCount, language, publishDate);
+// Example call to the updated constructor
+Book book = new Book(bookId, title, subtitle, author, description, isbn10, isbn13, pageCount, language, publishDate, thumbnailImageUrl, genres, ratings);
                 
         bookDao.create(book);
 
@@ -496,6 +508,8 @@ public class BookResource extends BaseResource {
             book.put(PUBLISH_DATE, userBookDto.getPublishTimestamp());
             book.put("create_date", userBookDto.getCreateTimestamp());
             book.put("read_date", userBookDto.getReadTimestamp());
+            book.put("rating", userBookDto.getRating());
+            book.put("thumbnail", userBookDto.getThumbnail());
 
             // Get tags
             List<TagDto> tagDtoList = tagDao.getByUserBookId(userBookDto.getId());

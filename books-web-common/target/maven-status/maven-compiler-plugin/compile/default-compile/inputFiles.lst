@@ -1,0 +1,11 @@
+/Users/sarthak/Desktop/SE-Project-2-/books-web-common/src/main/java/com/sismics/security/IPrincipal.java
+/Users/sarthak/Desktop/SE-Project-2-/books-web-common/src/main/java/com/sismics/rest/util/JsonUtil.java
+/Users/sarthak/Desktop/SE-Project-2-/books-web-common/src/main/java/com/sismics/rest/util/ValidationUtil.java
+/Users/sarthak/Desktop/SE-Project-2-/books-web-common/src/main/java/com/sismics/security/UserPrincipal.java
+/Users/sarthak/Desktop/SE-Project-2-/books-web-common/src/main/java/com/sismics/rest/resource/GenericExceptionMapper.java
+/Users/sarthak/Desktop/SE-Project-2-/books-web-common/src/main/java/com/sismics/rest/exception/ClientException.java
+/Users/sarthak/Desktop/SE-Project-2-/books-web-common/src/main/java/com/sismics/util/filter/TokenBasedSecurityFilter.java
+/Users/sarthak/Desktop/SE-Project-2-/books-web-common/src/main/java/com/sismics/rest/exception/ForbiddenClientException.java
+/Users/sarthak/Desktop/SE-Project-2-/books-web-common/src/main/java/com/sismics/security/AnonymousPrincipal.java
+/Users/sarthak/Desktop/SE-Project-2-/books-web-common/src/main/java/com/sismics/util/filter/RequestContextFilter.java
+/Users/sarthak/Desktop/SE-Project-2-/books-web-common/src/main/java/com/sismics/rest/exception/ServerException.java

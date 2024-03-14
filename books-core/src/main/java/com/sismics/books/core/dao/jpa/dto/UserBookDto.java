@@ -184,6 +184,18 @@ public class UserBookDto {
         return readTimestamp;
     }
 
+    // book.put("rating", userBookDto.getRating());
+    // book.put("thumbnail", userBookDto.getThumbnail());
+    // make function for the above two
+
+    public String getRating() {
+        return "rating";
+    }
+
+    public String getThumbnail() {
+        return "thumbnail";
+    }
+
     /**
      * Setter of readTimestamp.
      *

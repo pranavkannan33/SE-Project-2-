@@ -115,6 +115,12 @@
       <scope>test</scope>
     </dependency>
     
+  
+    <dependency>
+      <groupId>com.introproventures</groupId>
+      <artifactId>graphql-jpa-query-test-model-books</artifactId>
+      <version>1.2.4</version>
+    </dependency>
   </dependencies>
 
   <build>
