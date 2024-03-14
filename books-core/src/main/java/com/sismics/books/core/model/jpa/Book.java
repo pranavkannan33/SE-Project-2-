@@ -17,66 +17,54 @@ import com.google.common.base.Objects;
 @Entity
 @Table(name = "T_BOOK")
 public class Book {
-    /**
-     * Book ID.
-     */
     @Id
     @Column(name = "BOK_ID_C", length = 36)
     private String id;
-    
-    /**
-     * Title.
-     */
+
     @Column(name = "BOK_TITLE_C", nullable = false, length = 255)
     private String title;
-    
-    /**
-     * Subtitle.
-     */
+
     @Column(name = "BOK_SUBTITLE_C", length = 255)
     private String subtitle;
-    
-    /**
-     * Author.
-     */
+
     @Column(name = "BOK_AUTHOR_C", nullable = false, length = 255)
     private String author;
-    
-    /**
-     * Description.
-     */
+
     @Column(name = "BOK_DESCRIPTION_C", length = 4000)
     private String description;
-    
-    /**
-     * ISBN 10.
-     */
+
     @Column(name = "BOK_ISBN10_C", length = 10)
     private String isbn10;
-    
-    /**
-     * ISBN 13.
-     */
+
     @Column(name = "BOK_ISBN13_C", length = 13)
     private String isbn13;
-    
-    /**
-     * Page count.
-     */
+
     @Column(name = "BOK_PAGECOUNT_N")
     private Long pageCount;
-    
-    /**
-     * Language (ISO 639-1).
-     */
+
     @Column(name = "BOK_LANGUAGE_C", length = 2)
     private String language;
-    
-    /**
-     * Publication date.
-     */
+
     @Column(name = "BOK_PUBLISHDATE_D", nullable = false)
     private Date publishDate;
+
+    // New field for thumbnail image URL
+    @Column(name = "BOK_THUMBNAIL_URL_C")
+    private String thumbnailImageUrl;
+
+    // New relationship with Genre
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinTable(name = "T_BOOK_GENRE",
+            joinColumns = @JoinColumn(name = "BOK_ID_C"),
+            inverseJoinColumns = @JoinColumn(name = "GEN_ID_C"))
+    private Set<Genre> genres = new HashSet<>();
+
+    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
+    private Set<Rating> ratings = new HashSet<>();
+
+    // Assume ratings are calculated elsewhere, hence no direct field in this entity
+    // Constructors, getters, and setters for new fields
+
     
     /**
      * Constructor without parameters
@@ -98,6 +86,9 @@ public class Book {
      * @param pageCount
      * @param language
      * @param publishDate
+     * @param thumbnailImageUrl
+     * @param genres
+     * @param ratings
      */
     public Book(String id, String title, String subtitle, String author, String description, String isbn10, String isbn13, Long pageCount, String language, Date publishDate) {
         this.id = id;
@@ -110,6 +101,10 @@ public class Book {
         this.pageCount = pageCount;
         this.language = language;
         this.publishDate = publishDate;
+        this.thumbnailImageUrl = thumbnailImageUrl;
+        this.genres = genres;
+        this.ratings = ratings;
+
     }
 
     /**
@@ -293,6 +288,61 @@ public class Book {
     }
 
     /**
+     * Getter of thumbnailImageUrl.
+     * 
+     * @return thumbnailImageUrl
+     */
+    public String getthumbnailImageUrl() {
+        return thumbnailImageUrl;
+    }
+
+    /**
+     * Setter of thumbnailImageUrl.
+     * 
+     * @param thumbnailImageUrl thumbnailImageUrl
+     */
+    public void setthumbnailImageUrl(String thumbnailImageUrl) {
+        this.thumbnailImageUrl = thumbnailImageUrl;
+    }
+
+    /**
+     * Getter of genres.
+     * 
+     * @return genres
+     */
+    public Set<genres> getgenres() {
+        return genres;
+    }
+
+    /**
+     * Setter of genres.
+     * 
+     * @param genres genres
+     */
+    public void setgenres(Set<genres> genres) {
+        this.genres = genres;
+    }
+
+        /**
+     * Getter of ratings.
+     * 
+     * @return ratings
+     */
+    public Set<ratings> getratings() {
+        return ratings;
+    }
+
+    /**
+     * Setter of ratings.
+     * 
+     * @param ratings ratings
+     */
+    public void setratings(Set<ratings> ratings) {
+        this.ratings = ratings;
+    }
+
+
+    /**
      * Update the book with the given parameters.
      * 
      * @param title
@@ -304,6 +354,10 @@ public class Book {
      * @param pageCount
      * @param language
      * @param publishDate
+     * @param thumbnailImageUrl
+     * @param genres
+     * @param ratings
+     * 
      */
     public void updateBook(String title, String subtitle, String author, String description, String isbn10, String isbn13, Long pageCount, String language, Date publishDate) {
         if (title != null) {
@@ -341,6 +395,29 @@ public class Book {
         if (publishDate != null) {
             this.setPublishDate(publishDate);
         }
+
+        if (thumbnailImageUrl != null) {
+            this.setthumbnailImageUrl(thumbnailImageUrl);
+        }
+
+        if (genres != null) {
+            this.setgenres(genres);
+        }
+
+        if (ratings != null) {
+            this.setratings(ratings);
+        }
+    }
+
+    @Transient
+    public Double getAverageRating() {
+        return ratings.isEmpty() ? null :
+            ratings.stream().mapToInt(Rating::getValue).average().orElse(Double.NaN);
+    }
+
+    @Transient
+    public int getNumberOfRatings() {
+        return ratings.size();
     }
 
     @Override
